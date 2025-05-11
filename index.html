@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HappyBirthday</title>
+    <link
+      rel="stylesheet"
+      href="node_modules/bootstrap/dist/css/bootstrap.css"
+    />
+    <style>
+      html,
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: 0;
+      }
+
+      body {
+        background-image: url("assets/bg.jpg");
+        background-size: cover;
+        color: white;
+      }
+
+            @keyframes shake {
+        0% {
+          transform: translateX(0);
+        }
+        10% {
+          transform: translateY(10px);
+        }
+        20% {
+          transform: translateY(-10px);
+        }
+        30% {
+          transform: translateX(-8px);
+        }
+        40% {
+          transform: translateX(8px);
+        }
+        50% {
+          transform: translateY(6px);
+        }
+        60% {
+          transform: translateY(-6px);
+        }
+        70% {
+          transform: translateX(-4px);
+        }
+        80% {
+          transform: translateX(4px);
+        }
+        90% {
+          transform: translateY(2px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+
+      .shake {
+        animation: shake 0.4s;
+      }
+
+      .kotak {
+        border: 1px solid lightskyblue;
+        width: 60%;
+        height: 45vh;
+        border-radius: 30px;
+        background-color: rgba(255, 255, 255, 0);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        flex-direction: column;
+      }
+
+      .isi {
+        border: 1px solid lightblue;
+        border-radius: 10px;
+        height: 30px;
+        padding: 5px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        outline: none;
+      }
+
+      .isi:hover {
+        outline: none;
+        border-color: lightblue;
+        box-shadow: 0 0 10px #00bfff;
+      }
+
+      .isi:focus {
+        outline: none;
+        border-color: lightblue;
+        box-shadow: 0 0 10px #00bfff;
+      }
+
+      #submit {
+        border: 1px solid lightblue;
+        width: 100px;
+        height: 30px;
+        border-radius: 10px;
+        background-color: lightskyblue;
+        
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="d-flex justify-content-center align-items-center"
+      style="height: 100vh"
+    >
+      <div class="kotak">
+        <h4 class="text-center m-4">Pacar kamu siapa bub &#129325;</h4>
+        <form class="paswd">
+          <input type="text" class="isi" />
+        </form>
+
+        <button id="submit" type="button">
+          Submit
+        </button>
+      </div>
+    </div>
+
+    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script>
+      const notif = document.getElementById("notif");
+      const submitB = document.getElementById("submit");
+      const sandi = "adit";
+      const kotak = document.querySelector(".kotak");
+
+      submitB.addEventListener("click", () => {
+        const isi = document.querySelector(".isi").value.toLowerCase();
+        if (isi === sandi.toLowerCase()) {
+          window.location.href = "index2.html";
+        } else {
+          kotak.classList.add("shake");
+
+          setTimeout(() => {
+            kotak.classList.remove("shake");
+          }, 400);
+        }
+      });
+    </script>
+  </body>
+</html>
