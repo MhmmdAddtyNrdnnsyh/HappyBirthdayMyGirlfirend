@@ -1,148 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HappyBirthday</title>
-    <link
-      rel="stylesheet"
-      href="node_modules/bootstrap/dist/css/bootstrap.css"
-    />
-    <style>
-      html,
-      * {
-        padding: 0;
-        margin: 0;
-        box-sizing: 0;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HappyBirthday</title>
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <style>
+    @font-face {
+      font-family: "hbd";
+      src: url("/font/font.ttf") format("truetype");
+    }
+
+    html,
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-image: url("assets/bd.jpg");
+      object-fit: cover;
+      color: white;
+      font-family: "hbd";
+    }
+
+    .kotak {
+      border: 1px solid rgb(255, 157, 242);
+      width: 75%;
+      height: 40vh;
+      border-radius: 30px;
+      background-color: rgba(255, 255, 255, 0);
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      gap: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      margin: auto;
+      animation: naikTurun 2s ease-in-out infinite;
+    }
+    
+
+    .typewriter {
+      font-size: 1.2rem;
+      color: white;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
+      width: 100%;
+      text-align: justify;
+    }
+
+    .cursor::after {
+      content: '|';
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 0;
       }
 
-      body {
-        background-image: url("assets/bg.jpg");
-        background-size: cover;
-        color: white;
+      50% {
+        opacity: 1;
       }
+    }
 
-            @keyframes shake {
-        0% {
-          transform: translateX(0);
-        }
-        10% {
-          transform: translateY(10px);
-        }
-        20% {
-          transform: translateY(-10px);
-        }
-        30% {
-          transform: translateX(-8px);
-        }
-        40% {
-          transform: translateX(8px);
-        }
-        50% {
-          transform: translateY(6px);
-        }
-        60% {
-          transform: translateY(-6px);
-        }
-        70% {
-          transform: translateX(-4px);
-        }
-        80% {
-          transform: translateX(4px);
-        }
-        90% {
-          transform: translateY(2px);
-        }
-        100% {
-          transform: translateX(0);
-        }
+    @keyframes naikTurun {
+      0%, 100% {
+        transform: translateY(0);
       }
-
-      .shake {
-        animation: shake 0.4s;
+      50% {
+        transform: translateY(-10px);
       }
+    }
 
-      .kotak {
-        border: 1px solid lightskyblue;
-        width: 60%;
-        height: 45vh;
-        border-radius: 30px;
-        background-color: rgba(255, 255, 255, 0);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        display: flex;
-        align-items: center;
-        gap: 2rem;
-        flex-direction: column;
-      }
+    .cover {
+      width: 160px;
+      height: 160px;
+      border-radius: 15px;
+      margin-left: 20px;
+    }
+  </style>
+</head>
 
-      .isi {
-        border: 1px solid lightblue;
-        border-radius: 10px;
-        height: 30px;
-        padding: 5px;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        outline: none;
-      }
+<body>
+  <div>
+    <h2 class="text-center mt-2 fs-1 mt-5">Happy Birtdayy Sayangg!!!</h2>
+  </div>
 
-      .isi:hover {
-        outline: none;
-        border-color: lightblue;
-        box-shadow: 0 0 10px #00bfff;
-      }
+    <div class="typewriter cursor fs-4 p-5" id="typewriter"></div>
 
-      .isi:focus {
-        outline: none;
-        border-color: lightblue;
-        box-shadow: 0 0 10px #00bfff;
-      }
-
-      #submit {
-        border: 1px solid lightblue;
-        width: 100px;
-        height: 30px;
-        border-radius: 10px;
-        background-color: lightskyblue;
-        
-      }
-    </style>
-  </head>
-  <body>
-    <div
-      class="d-flex justify-content-center align-items-center"
-      style="height: 100vh"
-    >
-      <div class="kotak">
-        <h4 class="text-center m-4">Pacar kamu siapa bub &#129325;</h4>
-        <form class="paswd">
-          <input type="text" class="isi" />
-        </form>
-
-        <button id="submit" type="button">
-          Submit
-        </button>
-      </div>
+  <div class="kotak">
+    <div class="cover">
+      <img src="/assets/semua cinta terdengar sama.jpg" style="object-fit: cover; width: 100%; height: 100%; border-radius: 15px;">
     </div>
 
-    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
-    <script>
-      const notif = document.getElementById("notif");
-      const submitB = document.getElementById("submit");
-      const sandi = "adit";
-      const kotak = document.querySelector(".kotak");
+    <div class="tombolFungsi">
+      <i></i>
+    </div>
+  </div>
 
-      submitB.addEventListener("click", () => {
-        const isi = document.querySelector(".isi").value.toLowerCase();
-        if (isi === sandi.toLowerCase()) {
-          window.location.href = "index2.html";
-        } else {
-          kotak.classList.add("shake");
+  <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+  <script>
+    const text = "Haloo sayangg di hari yang sangat special ini aku mau ngucapinn, HAPPY BIRTHDAYY SAYANGNYAA AKUUU!!!, xixixi terimakasii sayangg selama ini kamu udah baik ke aku, baik buruknya aku kamu terima dengan tulus, aku sangat sangat berterimakasih sekali ke kamu karna udah lahir di dunia ini dan menjadi pasangan aku yangg sangattttttt baikk, kamu itu tiada tandingnya, aku selalu sayang sama kamu dan ga pernah bosan dan berhenti untuk mencintai kamuuu. lovee youuu moreeee sayangggkuuu🤍🤍";
+    const speed = 40;
+    let i = 0;
 
-          setTimeout(() => {
-            kotak.classList.remove("shake");
-          }, 400);
-        }
-      });
-    </script>
-  </body>
+    function ketik() {
+      if (i < text.length) {
+        document.getElementById("typewriter").textContent += text.charAt(i);
+        i++;
+        setTimeout(ketik, speed);
+      }
+    }
+
+    ketik();
+  </script>
+</body>
+
 </html>
