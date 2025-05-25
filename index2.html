@@ -1,273 +1,729 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buku</title>
+    <link rel="stylesheet" href="/fontawesome/css/all.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FlipBook</title>
-  <link rel="stylesheet" href="/fontawesome/css/all.css" />
-  <style>
-    @font-face {
-      font-family: 'hbd';
-      src: url("/font/font.ttf") format("truetype");
-    }
-
-    html,
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'hbd';
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: powderblue;
-    }
-
-    /* Book */
-    .book {
-      position: relative;
-      width: 350px;
-      height: 500px;
-      transition: transform 0.5s;
-    }
-
-    .paper {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      perspective: 1500px;
-    }
-
-    .front,
-    .back {
-      background-color: white;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      transform-origin: left;
-      transition: transform 0.5s;
-      border-radius: 12px;
-    }
-
-    .front {
-      z-index: 1;
-      backface-visibility: hidden;
-      border-left: 3px solid powderblue;
-    }
-
-    .back {
-      z-index: 0;
-    }
-
-    .front-content,
-    .back-content {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .back-content {
-      transform: rotateY(180deg);
-    }
-
-    /* Paper flip effect */
-    .flipped .front,
-    .flipped .back {
-      transform: rotateY(-180deg);
-    }
-
-    /* Controller Buttons */
-    button {
-      border: none;
-      background-color: transparent;
-      cursor: pointer;
-      margin: 10px;
-      transition: transform 0.5s;
-    }
-
-    button:focus {
-      outline: none;
-    }
-
-    button:hover i {
-      color: #636363;
-    }
-
-    i {
-      font-size: 50px;
-      color: gray;
-    }
-
-    /* Paper stack order */
-    #p1 {
-      z-index: 3;
-    }
-
-    #p2 {
-      z-index: 2;
-    }
-
-    #p3 {
-      z-index: 1;
-    }
-
-    img {
-      border-radius: 12px;
-    }
-  </style>
-</head>
-
-<body>
-  <!-- Previous Button -->
-  <button id="prev-btn">
-    <i class="fas fa-arrow-circle-left"></i>
-  </button>
-
-  <!-- Book -->
-  <div id="book" class="book">
-    <!-- Paper 1 -->
-    <div id="p1" class="paper">
-      <div class="front">
-        <div id="f1" class="front-content">
-          <h1>front 1</h1>
-        </div>
-      </div>
-      <div class="back">
-        <div id="b1" class="back-content">
-          <h1>Back 1</h1>
-        </div>
-      </div>
-    </div>
-    <!-- Paper 2 -->
-    <div id="p2" class="paper">
-      <div class="front">
-        <div id="f2" class="front-content">
-          <h1>Front 2</h1>
-        </div>
-      </div>
-      <div class="back">
-        <div id="b2" class="back-content">
-          <h1>Back 2</h1>
-        </div>
-      </div>
-    </div>
-    <!-- Paper 3 -->
-    <div id="p3" class="paper">
-      <div class="front">
-        <div id="f3" class="front-content">
-          <h1>Front 3</h1>
-        </div>
-      </div>
-      <div class="back">
-        <div id="b3" class="back-content">
-          <h1>Back 3</h1>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Next Button -->
-  <button id="next-btn">
-    <i class="fas fa-arrow-circle-right"></i>
-  </button>
-
-  <script>
-    // References to DOM Elements
-    const prevBtn = document.querySelector("#prev-btn");
-    const nextBtn = document.querySelector("#next-btn");
-    const book = document.querySelector("#book");
-
-    const paper1 = document.querySelector("#p1");
-    const paper2 = document.querySelector("#p2");
-    const paper3 = document.querySelector("#p3");
-
-    // Event Listener
-    prevBtn.addEventListener("click", goPrevPage);
-    nextBtn.addEventListener("click", goNextPage);
-
-    // Business Logic
-    let currentLocation = 1;
-    let numOfPapers = 3;
-    let maxLocation = numOfPapers + 1;
-
-    function openBook() {
-      book.style.transform = "translateX(50%)";
-      prevBtn.style.transform = "translateX(-180px)";
-      nextBtn.style.transform = "translateX(180px)";
-    }
-
-    function closeBook(isAtBeginning) {
-      if (isAtBeginning) {
-        book.style.transform = "translateX(0%)";
-      } else {
-        book.style.transform = "translateX(100%)";
+    <style>
+      @font-face {
+        font-family: "hbd";
+        src: url("/font/font.ttf") format("truetype");
       }
 
-      prevBtn.style.transform = "translateX(0px)";
-      nextBtn.style.transform = "translateX(0px)";
-    }
+      html,
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-    function goNextPage() {
-      if (currentLocation < maxLocation) {
-        switch (currentLocation) {
-          case 1:
-            openBook();
-            paper1.classList.add("flipped");
-            paper1.style.zIndex = 1;
-            break;
-          case 2:
-            paper2.classList.add("flipped");
-            paper2.style.zIndex = 2;
-            break;
-          case 3:
-            paper3.classList.add("flipped");
-            paper3.style.zIndex = 3;
-            closeBook(false);
-            break;
-          default:
-            throw new Error("unkown state");
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: powderblue;
+      }
+
+      /* Book */
+      .book {
+        position: relative;
+        width: 350px;
+        height: 550px;
+        transition: transform 0.5s;
+      }
+
+      .paper {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        perspective: 1500px;
+      }
+
+      .front,
+      .back {
+        background-color: white;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        transform-origin: left;
+        transition: transform 0.5s;
+        border-radius: 12px;
+      }
+
+      .front {
+        z-index: 1;
+        backface-visibility: hidden;
+        border-left: 3px solid powderblue;
+      }
+
+      .back {
+        z-index: 0;
+      }
+
+      .front-content,
+      .back-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .back-content {
+        transform: rotateY(180deg);
+      }
+
+      /* Paper flip effect */
+      .flipped .front,
+      .flipped .back {
+        transform: rotateY(-180deg);
+      }
+
+      /* Controller Buttons */
+      button {
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        margin: 10px;
+        transition: transform 0.5s;
+      }
+
+      button:focus {
+        outline: none;
+      }
+
+      button:hover i {
+        color: #636363;
+      }
+
+      i {
+        font-size: 50px;
+        color: gray;
+      }
+
+      /* Paper stack order */
+      #p1 {
+        z-index: 6;
+      }
+
+      #p2 {
+        z-index: 5;
+      }
+
+      #p3 {
+        z-index: 4;
+      }
+
+      #p4 {
+        z-index: 3;
+      }
+
+      #p5 {
+        z-index: 2;
+      }
+
+      #p6 {
+        z-index: 1;
+      }
+
+      img {
+        border-radius: 12px;
+      }
+
+      #seek-bar {
+        -webkit-appearance: none;
+        overflow: hidden;
+      }
+
+      #seek-bar::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 2px;
+        height: 20px;
+        background-color: lightskyblue;
+        box-shadow: -400px 0 0 400px wheat;
+      }
+
+      .playButton span {
+        position: absolute;
+        top: 50%;
+        left: 25%;
+        transform: translateY(-50%);
+        width: 5px;
+        height: 10px;
+        border-radius: 3px;
+        background-color: rgb(255, 255, 255);
+        transition: 0.5s;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+      }
+
+      .playButton span:nth-child(2) {
+        left: 55%;
+        transform-origin: center;
+      }
+
+      .playButton.pause span:nth-child(2) {
+        transform: translateY(-50%) scaleY(0);
+      }
+
+      .playButton.pause span:nth-child(1) {
+        width: 35%;
+        left: 37%;
+        transform: translateY(-50% -50%);
+        border-radius: 0;
+        clip-path: polygon(0 0, 100% 50%, 100% 50%, 0% 100%);
+      }
+
+      .playButton.pause {
+        animation: pulse 2s linear infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0;
         }
-        currentLocation++;
+        50% {
+          box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.1);
+        }
+        100% {
+          box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.4);
+        }
       }
-    }
+    </style>
+  </head>
 
-    function goPrevPage() {
-      if (currentLocation > 1) {
-        switch (currentLocation) {
-          case 2:
-            closeBook(true);
-            paper1.classList.remove("flipped");
-            paper1.style.zIndex = 3;
-            break;
-          case 3:
-            paper2.classList.remove("flipped");
-            paper2.style.zIndex = 2;
-            break;
-          case 4:
-            openBook();
-            paper3.classList.remove("flipped");
-            paper3.style.zIndex = 1;
-            break;
-          default:
-            throw new Error("unkown state");
+  <body>
+    <!-- Previous Button -->
+    <button class="mr-5" id="prev-btn">
+      <i class="fas fa-arrow-circle-left"></i>
+    </button>
+
+    <!-- Book -->
+    <div id="book" class="book">
+      <!-- Paper 1 -->
+      <div id="p1" class="paper">
+        <div class="front">
+          <div id="f1" class="front-content">
+            <img
+              src="/assets/front.png"
+              class="object-cover w-full h-full"
+            />
+          </div>
+        </div>
+        <div class="back">
+          <div id="b1" class="back-content">
+            <img
+              src="/assets/Wallpaper.jpeg"
+              class="object-cover h-full w-full absolute -z-10"
+              alt=""
+            />
+            <h1 class="text-2xl font-black">Play Lagu Dulu Bub&#129325;</h1>
+            <audio src="" id="audio"></audio>
+            <div
+              class="bg-blue-50 mt-10 w-3/4 h-80 border rounded-xl shadow-[0_0_20px_5px_rgba(0,0,0,0.3)] overflow-hidden"
+            >
+              <h1
+                class="text-center text-2xl font-semibold mt-3"
+                id="namaMusik"
+              >
+                Nama Musik
+              </h1>
+              <p class="text-center" id="namaArtis">Nama Artis</p>
+              <div
+                class="w-24 h-24 rounded-full relative mx-auto shadow-xl mt-2"
+                id="cover"
+              >
+                <img
+                  src="./music/cover/SampaiJadiDebu.jpg"
+                  class="rounded-full"
+                />
+              </div>
+              <div id="slider" class="w-full relative p-10 -mt-7">
+                <input
+                  type="range"
+                  value="0"
+                  id="seek-bar"
+                  class="bg-pink-200 h-2 rounded-xl w-full cursor-pointer"
+                />
+                <span id="lama-musik" class="absolute right-10">00.00</span>
+                <span id="realtime">00.00</span>
+              </div>
+
+              <div
+                id="kontrol"
+                class="w-full flex justify-center items-center gap-10 mx-auto -mt-2"
+              >
+                <button class="sesudah">
+                  <i
+                    class="fa-solid fas fa-backward-step text-3xl text-black"
+                  ></i>
+                </button>
+                <button
+                  class="playButton pause relative w-7 h-7 rounded-full bg-black hover:bg-gray-500"
+                >
+                  <span></span>
+                  <span></span>
+                </button>
+                <button class="sebelum">
+                  <i class="fa-solid fa-forward-step text-3xl text-black"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Paper 2 -->
+      <div id="p2" class="paper">
+        <div class="front">
+          <div id="f2" class="front-content">
+            <img
+              src="/assets/Wallpaper.jpeg"
+              class="object-cover w-full h-full absolute -z-10"
+              alt=""
+            />
+            <h1 class="font-black">Prolog</h1>
+            <div class="text-sm text-justify p-5">
+              <p>
+                Oke sebelum membaca cerita alangkah baiknya baca di samping adit
+                yaa, karna ini cerita yang bahasanya gajelas mohon dimaklumi
+                karena tiada yang sempurna kecuali dirimu, xixixi.
+              </p>
+              <br />
+              <p>
+                Kisah ini menceritakan tentang anak sekolah yang baru pertama
+                kali masuk sekolah SMK yang disambut hangat sama cewe yang
+                sangat istimewa. Siapakahh itu?
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="back">
+          <div id="b2" class="back-content">
+            <img
+              src="/assets/Wallpaper.jpeg"
+              class="object-cover w-full h-full absolute -z-10"
+            />
+            <h1 class="font-black">Awal Tak Disangka</h1>
+            <div class="text-sm text-justify p-5">
+              <p>
+                Suatu saat di sekolah, para siswa baru di SMK dibuat heboh
+                dengan berita bahwa akan diadakannya kemah. Aku salah satu anak
+                yang cukup kaget dengan kabar itu. Beberapa hari kemudian, kemah
+                itu pun akhirnya diselenggarakan.
+              </p>
+              <br />
+              <p>
+                Pagi itu, aku sibuk menata barang bawaan yang jumlahnya cukup
+                banyak. Setelah semuanya siap, aku berangkat dan tiba di bumi
+                perkemahan. “Ahhh, teduh sekali tempatnya,” seruku dengan
+                perasaan senang. Setelah itu, aku berpamitan dengan bapaku. Aku
+                mencium tangannya dan beliau berkata, “Semangat ya, Nak. Semoga
+                kegiatannya lancar dan kamu selalu diberi kesehatan.” Aku pun
+                tersenyum tipis dan berjalan menuju rombongan temanku.
+              </p>
+              <br />
+              <p>Dan... saat itulah cerita indah ini dimulai.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Paper 3 -->
+      <div id="p3" class="paper">
+        <div class="front">
+          <div id="f3" class="front-content">
+            <img
+              src="/assets/Wallpaper.jpeg"
+              class="object-cover h-full w-full absolute -z-10"
+              alt=""
+            />
+            <div class="text-sm text-justify p-5">
+              <p>
+                Setelah bergabung dengan teman-teman, aku sempat berbincang dan
+                bergurau. Tak lama, seluruh siswa kelas 10 dipanggil dan
+                dikumpulkan di lapangan untuk upacara pembukaan. Setelah
+                upacara, kegiatan demi kegiatan kami jalani sesuai arahan guru.
+              </p>
+              <br />
+              <p>
+                Malam harinya, tenda kami dibuat gaduh dengan kabar salah satu
+                teman sedang sakit. Kami harus mencari pengganti untuk lomba
+                kultum. Tiga orang, termasuk aku, diminta pergi ke tenda PMR
+                untuk menentukan siapa yang akan menggantikan. “Yaudah, biar
+                adil, suit aja gimana?” seru salah satu temanku. “Ayo!” jawab
+                kami serempak.
+              </p>
+              <br />
+              <p>
+                Kami pun suit sampai akhirnya tinggal aku yang kalah. “Yahahaha,
+                kamu yang jadi pengganti lomba kultum,” ejek temanku.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="back">
+          <div id="b3" class="back-content">
+            <img
+              src="/assets/Wallpaper.jpeg"
+              class="object-cover w-full h-full absolute -z-10"
+              alt=""
+            />
+            <div class="text-sm text-justify p-5">
+              <p>
+                Aku melirik teman yang sedang sakit dan bilang, “Hey, kamu masih
+                kuat, kan? Aku grogi nih...” Dia menjawab dengan nada santai,
+                “Liat nih keadaanku, nggak memungkinkan buat aku lomba. Kalau
+                pas lomba aku pingsan gimana? Toh nanti juga aku pulang.”
+                Mukanya ngledek banget.
+              </p>
+              <br />
+              <p>
+                Aku sempat ngadu ke kakak kelas yang sedang jaga, “Yang lain
+                aja, Kak... aku grogi. Gabisa.” Sambil menunjukkan kakiku yang
+                bergetar. “Lah, tadi yang kalah suit siapa? Ya udah, tanggung
+                jawab,” jawab kakak kelas sedikit membentak. Aku pun akhirnya
+                pamit dari tenda PMR, kembali ke tenda sambil mikirin lomba
+                kultum... dan juga membayangkan wajah kakak kelas tadi. Dalam
+                hati aku berkata, “Masya Allah... cantik banget kakak kelas
+                tadi.”
+              </p>
+              <br />
+              <p>
+                Malam pun berlalu. Esok paginya, matahari menyambutku dengan
+                cerah. Aku bangun dengan suasana hati yang senang. Sekitar jam
+                7, kami semua disuruh senam pagi.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paper 4 -->
+      <div id="p4" class="paper">
+        <div class="front">
+          <div id="f4" class="front-content">
+            <img
+              src="/assets/Wallpaper.jpeg"
+              class="object-cover h-full w-full absolute -z-10"
+              alt=""
+            />
+            <div class="text-sm text-justify p-5">
+              <p>
+                Setelah senam, salah satu guru memanggil beberapa dari kami
+                untuk pembagian tugas adzan. “Adit, kamu adzan Ashar ya,” kata
+                guru. “Siap, Pak,” jawabku.
+              </p>
+              <br />
+              <p>
+                Ketika waktu Ashar tiba, aku berkata dalam hati, “Ehh, udah
+                Ashar nih... waktunya adzan.” Saat aku adzan, aku melihat
+                seseorang memperhatikanku terus. Dalam hati aku berpikir, “Eh,
+                ini bukannya kakak kelas yang kemarin ya? Kok dia liatin aku
+                terus, sih? Ah, sudahlah...” Aku lanjut adzan dan sholat seperti
+                biasa.
+              </p>
+              <br />
+              <p>
+                Malam harinya, aku bersiap untuk tidur. Besok paginya, kami
+                kembali senam dan melanjutkan dengan wide-game. Beberapa jam
+                kemudian aku berseru, “Ahh, capek banget wide-gamenya,” sambil
+                jalan ke tenda buat istirahat.
+              </p>
+              <br />
+              <p>
+                Hari terakhir pun tiba. Setelah upacara penutupan, aku segera
+                packing dan bersiap pulang. Aku dan temanku duduk-duduk di
+                musholla menunggu jemputan
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="back">
+          <div id="b4" class="back-content">
+            <img
+              src="/assets/Wallpaper.jpeg"
+              class="object-cover w-full h-full absolute -z-10"
+              alt=""
+            />
+            <div class="text-sm text-justify p-5">
+              <p>
+                Tak lama, bapaku datang sambil tersenyum hangat. “Gimana tadi
+                acaranya? Enak, kan?” tanyanya. “Enak, Pa... tapi cape, hehe,”
+                jawabku sambil tersenyum tipis.
+              </p>
+              <br />
+              <p>
+                Dalam perjalanan pulang, pikiranku masih memutar wajah kakak
+                kelas yang aku temui di tenda PMR. “Siapa ya dia? Kok dari
+                kemarin liatin aku terus? Apa dia suka sama aku? Ah, sudahlah...
+                mungkin cuma perasaan aku aja.” Sesampainya di rumah, aku
+                langsung menuju kamar dan berkata, “Ahhh, akhirnya bisa
+                istirahat beneran.” Tak lama, aku pun tertidur.
+              </p>
+              <br /><br />
+              <p><strong>Beberapa Hari Kemudian</strong></p>
+              <br />
+              <p>
+                Waktu itu aku dan teman-teman lagi kelompok sambil bercanda
+                membahas materi. Tiba-tiba, ting! — pesan WhatsApp masuk. “Dit,
+                ada yang ngajak fotbar kamu.”
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--paper 5-->
+      <div id="p5" class="paper">
+        <div class="front">
+          <div id="f5" class="front-content">
+            <img
+              src="/assets/Wallpaper.jpeg"
+              class="object-cover w-full h-full absolute -z-10"
+              alt=""
+            />
+            <div class="text-sm text-justify p-5">
+              <p>
+                Aku liat pesan itu sambil melotot. Jantungku deg-degan. Langsung
+                aku bilang ke temenku, Rayis, “EHHH YIS GILAAA, AKU DIAJAK
+                FOTBAR SAMA KAKEL??!!!” Rayis langsung ngeledek, “Cieee cieee
+                ada yang ngajak fotbarrr, kiw kiww~”
+              </p>
+              <br />
+              <p>
+                “Bacot ahhh! Kayaknya aku nggak bisa tidur deh. Masalahnya...
+                cewe ini cakep banget asli.”, “Gilaa, keren banget lu, Dit!
+                Xixixi...”
+              </p>
+              <br />
+              <p>
+                Pulang dari kelompok, aku seneng nggak karuan. Ini pertama
+                kalinya aku diajak fotbar sama cewek, dan itu pun cewek yang aku
+                taksir. Malamnya, waktu aku lagi beli gorengan, ting! —
+                notifikasi WA masuk lagi.
+              </p>
+              <br />
+              <p>
+                Assalamualaikum “Eh? Siapa nih?” batinku. Aku jawab:
+                Waalaikumsalam “Siapa yaa?” Dia jawab: Tebakkk~ Aku nebak: Ini
+                Melin yaa? “Ihh kok tau?” “Tau lah, keliatan dari bio kamu.”
+                “Ini bener Adit PPLG?” “Iya bener. Salken yaa~” “Iya, salken
+                juga.”
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="back">
+          <div id="b5" class="back-content">
+            <img
+              src="/assets/Wallpaper.jpeg"
+              class="object-cover w-full h-full absolute -z-10"
+              alt=""
+            />
+            <div class="text-sm text-justify p-5">
+              <p>
+                Dari obrolan itu... suasana hatiku langsung berubah jadi senang
+                banget. Hari-hari setelahnya, kita rutin chatan. Seru, lucu,
+                dan... hangat. Aku inget banget pas aku ngegombal:
+              </p>
+              <p>
+                <strong
+                  >“Kamu kayak bintang di langit... selalu bikin malam jauh
+                  lebih indah.”</strong
+                >
+              </p>
+              <br />
+              <p>
+                Hahaha. Rasanya... hati ini udah copot, salting ngga karuan.
+                Kata demi kata, chat demi chat, semua aku kirim ke Melin. Aku
+                ngerasa... nyaman.
+              </p>
+              <br />
+              <p>
+                Sampai suatu pagi di hari Minggu, aku bilang ke diri sendiri,
+                “Duh, confesh ga ya? Confesh ga ya?”
+              </p>
+              <p>
+                Akhirnya aku nekat. Aku nyatakan perasaan: “Mell, you want to be
+                my girlfriend?” Dia jawab: “Yess. I’m yours, and you are mine.”
+              </p>
+              <br />
+              <p>“DEMI APAA?? AKU DITERIMA CEWE SECANTIK MELIN??!”</p>
+              <br />
+              <p>
+                Hari itu, aku bahagia... sampe rasanya tujuh hari tujuh malam
+                pun belum cukup buat gambarin rasanya.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="p6" class="paper">
+        <div class="front">
+          <div id="f6" class="front-content">
+            <img
+              src="/assets/Wallpaper.jpeg"
+              class="object-cover h-full w-full absolute -z-10"
+              alt=""
+            />
+            <div class="text-sm text-justify p-5">
+              <p>
+                setelah semua yang sudah aku lalui bersama dia, aku sadar kalau
+                aku benar-benar telah menemukan sosok yang begitu berarti dalam
+                hidupku. Dia bukan hanya pasangan, tapi juga teman terbaik yang
+                selalu bisa diandalkan, tempat aku cerita saat hati sedang
+                gundah, dan orang pertama yang hadir membawa semangat saat aku
+                lelah. Dia adalah sosok yang selalu mencoba memahami aku, bahkan
+                di saat-saat aku sulit untuk dimengerti. Di balik candanya, dia
+                adalah perempuan hebat yang selalu memberikan ketenangan. Dalam
+                diamnya, dia menyimpan perhatian yang luar biasa. Dalam
+                kesederhanaannya, aku menemukan kenyamanan yang belum pernah aku
+                rasakan sebelumnya. Aku sangat bersyukur bisa mengenal dan
+                memiliki dia. Meylinda Nur Azizah, wanita yang begitu sabar,
+                kuat, dan tulus mencintai aku, dengan semua kelebihan dan
+                kekuranganku. Hubungan ini mungkin tidak selalu mulus, tapi aku
+                percaya selama kita saling percaya dan saling berusaha, semua
+                bisa kita lewati bersama. I’m proud of you forever, and love you
+                always. Love you so much.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="back">
+          <div id="b6" class="back-content">
+            <img src="/assets/back.png" class="object-cover h-full w-full" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Next Button -->
+    <button class="ml-5" id="next-btn">
+      <i class="fas fa-arrow-circle-right"></i>
+    </button>
+
+    <script src="./music/data.js"></script>
+    <script src="./music/app.js"></script>
+    <script>
+      // References to DOM Elements
+      const prevBtn = document.querySelector("#prev-btn");
+      const nextBtn = document.querySelector("#next-btn");
+      const book = document.querySelector("#book");
+
+      const paper1 = document.querySelector("#p1");
+      const paper2 = document.querySelector("#p2");
+      const paper3 = document.querySelector("#p3");
+      const paper4 = document.querySelector("#p4");
+      const paper5 = document.querySelector("#p5");
+      const paper6 = document.querySelector("#p6");
+
+      // Event Listener
+      prevBtn.addEventListener("click", goPrevPage);
+      nextBtn.addEventListener("click", goNextPage);
+
+      // Business Logic
+      let currentLocation = 1;
+      let numOfPapers = 6;
+      let maxLocation = numOfPapers + 1;
+
+      function openBook() {
+        book.style.transform = "translateX(50%)";
+        prevBtn.style.transform = "translateX(-180px)";
+        nextBtn.style.transform = "translateX(180px)";
+      }
+
+      function closeBook(isAtBeginning) {
+        if (isAtBeginning) {
+          book.style.transform = "translateX(0%)";
+        } else {
+          book.style.transform = "translateX(100%)";
         }
 
-        currentLocation--;
+        prevBtn.style.transform = "translateX(0px)";
+        nextBtn.style.transform = "translateX(0px)";
       }
-    }
-  </script>
-</body>
 
+      function goNextPage() {
+        if (currentLocation < maxLocation) {
+          switch (currentLocation) {
+            case 1:
+              openBook();
+              paper1.classList.add("flipped");
+              paper1.style.zIndex = 1;
+              break;
+            case 2:
+              paper2.classList.add("flipped");
+              paper2.style.zIndex = 2;
+              break;
+            case 3:
+              paper3.classList.add("flipped");
+              paper3.style.zIndex = 3;
+              break;
+            case 4:
+              paper4.classList.add("flipped");
+              paper4.style.zIndex = 4;
+              break;
+            case 5:
+              paper5.classList.add("flipped");
+              paper5.style.zIndex = 5;
+              break;
+            case 6:
+              paper6.classList.add("flipped");
+              paper6.style.zIndex = 6;
+              closeBook(false);
+              break;
+            default:
+              throw new Error("unkown state");
+          }
+          currentLocation++;
+        }
+      }
+
+      function goPrevPage() {
+        if (currentLocation > 1) {
+          switch (currentLocation) {
+            case 2:
+              closeBook(true);
+              paper1.classList.remove("flipped");
+              paper1.style.zIndex = 6;
+              break;
+            case 3:
+              paper2.classList.remove("flipped");
+              paper2.style.zIndex = 5;
+              break;
+            case 4:
+              paper3.classList.remove("flipped");
+              paper3.style.zIndex = 4;
+              break;
+            case 5:
+              paper4.classList.remove("flipped");
+              paper4.style.zIndex = 3;
+              break;
+            case 6:
+              paper5.classList.remove("flipped");
+              paper5.style.zIndex = 2;
+              break;
+            case 7:
+              openBook();
+              paper6.classList.remove("remove");
+              paper6.style.zIndex = 1;
+              break;
+            default:
+              throw new Error("unkown state");
+          }
+
+          currentLocation--;
+        }
+      }
+    </script>
+  </body>
 </html>
